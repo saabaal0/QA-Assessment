@@ -1,4 +1,4 @@
-import RegisterPage from "../pages/registerPage";
+import RegisterPage from "../pages/RegisterPage";
 import RegisterAssertions from "../assertions/RegisterAssertion";
 
 describe("User Registration", () => {
