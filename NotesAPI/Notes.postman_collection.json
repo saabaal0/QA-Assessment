@@ -1,0 +1,1875 @@
+{
+	"info": {
+		"_postman_id": "8050e3b5-db42-42ee-8a78-df8a09a0e34a",
+		"name": "Notes",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40601307",
+		"_collection_link": "https://test44-6226.postman.co/workspace/QA_Assessment~7133d60a-bfcc-4cd4-a5c9-eda48148d78f/collection/40601307-8050e3b5-db42-42ee-8a78-df8a09a0e34a?action=share&source=collection_link&creator=40601307"
+	},
+	"item": [
+		{
+			"name": "Functional Flow",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify token is present and save it in variable\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    pm.expect(responseData.data).to.have.property(\"token\");\r",
+									"\r",
+									"    pm.environment.set(\"token\", responseData.data.token);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "sabal@yopmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Admin@123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/notes/api/users/login",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notes",
+								"api",
+								"users",
+								"login"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'POST' \\\r\n  'https://practice.expandtesting.com/notes/api/users/login' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/x-www-form-urlencoded' \\\r\n  -d 'email=aasas&password=sasasasa'"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Note",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const responseData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Note created successfully\", function () {\r",
+									"    pm.expect(responseData.success).to.be.true;\r",
+									"    pm.expect(responseData.message).to.eql(\"Note successfully created\");\r",
+									"    pm.expect(responseData.data).to.have.property(\"id\");\r",
+									"});\r",
+									"\r",
+									"pm.environment.set(\"noteId\", responseData.data.id);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "x-auth-token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "title",
+									"value": "Shopping List",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Buy table and Chair",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "Home",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/notes/api/notes",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notes",
+								"api",
+								"notes"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'POST' \\\r\n  'https://practice.expandtesting.com/notes/api/notes' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/x-www-form-urlencoded' \\\r\n  -d 'title=aa&description=aa&category=Home'"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Notes by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify if note exists by noteId\", () => {\r",
+									"    pm.expect(pm.response.text()).to.include(pm.environment.get(\"noteId\"));\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "x-auth-token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/notes/api/notes/{{noteId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notes",
+								"api",
+								"notes",
+								"{{noteId}}"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'GET' \\\r\n  'https://practice.expandtesting.com/notes/api/notes/11' \\\r\n  -H 'accept: application/json'"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Note",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const responseData = pm.response.json();\r",
+									"const noteId = pm.environment.get(\"noteId\");\r",
+									"pm.test(\"Note update was successful\", () => {\r",
+									"    pm.expect(responseData.message).to.eql(\"Note successfully Updated\");\r",
+									"    pm.expect(responseData.data.id).to.eql(noteId);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "x-auth-token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "title",
+									"value": "Note is Edited",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "This note is edited via Postman",
+									"type": "text"
+								},
+								{
+									"key": "completed",
+									"value": "false",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "Personal",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/notes/api/notes/{{noteId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notes",
+								"api",
+								"notes",
+								"{{noteId}}"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'PUT' \\\r\n  'https://practice.expandtesting.com/notes/api/notes/11' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/x-www-form-urlencoded' \\\r\n  -d 'title=12&description=1&completed=false&category=Work'"
+					},
+					"response": []
+				},
+				{
+					"name": "Update the completed status of a note",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const responseData = pm.response.json();\r",
+									"const noteId = pm.environment.get(\"noteId\");\r",
+									"pm.test(\"Note update was successful\", () => {\r",
+									"    pm.expect(responseData.message).to.eql(\"Note successfully Updated\");\r",
+									"    pm.expect(responseData.data.id).to.eql(noteId);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "x-auth-token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "completed",
+									"value": "true",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/notes/api/notes/{{noteId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notes",
+								"api",
+								"notes",
+								"{{noteId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Note",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const responseData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Note deleted successfully\", () => {\r",
+									"    pm.expect(responseData.message).to.eql(\"Note successfully deleted\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "x-auth-token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/notes/api/notes/{{noteId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notes",
+								"api",
+								"notes",
+								"{{noteId}}"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'DELETE' \\\r\n  'https://practice.expandtesting.com/notes/api/notes/11' \\\r\n  -H 'accept: application/json'"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Notes by ID after Deletion",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Verify that noteId does not exists after deletion\", () => {\r",
+									"    pm.expect(pm.response.text()).to.not.include(pm.environment.get(\"noteId\"));\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "x-auth-token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/notes/api/notes/{{noteId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notes",
+								"api",
+								"notes",
+								"{{noteId}}"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'GET' \\\r\n  'https://practice.expandtesting.com/notes/api/notes/11' \\\r\n  -H 'accept: application/json'"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Create Note",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Login response contains token\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    pm.expect(responseData.data).to.have.property(\"token\");\r",
+									"\r",
+									"    pm.environment.set(\"token\", responseData.data.token);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "sabal@yopmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Admin@123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/notes/api/users/login",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notes",
+								"api",
+								"users",
+								"login"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'POST' \\\r\n  'https://practice.expandtesting.com/notes/api/users/login' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/x-www-form-urlencoded' \\\r\n  -d 'email=aasas&password=sasasasa'"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Note with empty form values",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Should return 400 for missing form data values\", () => {\r",
+									"    pm.expect(pm.response.code).to.eql(400);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "x-auth-token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "title",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/notes/api/notes",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notes",
+								"api",
+								"notes"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'POST' \\\r\n  'https://practice.expandtesting.com/notes/api/notes' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/x-www-form-urlencoded' \\\r\n  -d 'title=aa&description=aa&category=Home'"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Note with invalid token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Should return 401 for for invalid token\", () => {\r",
+									"    pm.expect(pm.response.code).to.eql(401);\r",
+									"     const responseData = pm.response.json();\r",
+									"    pm.expect(responseData.message).to.include(\"Access token is not valid or has expired\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "x-auth-token",
+								"value": "123",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "title",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/notes/api/notes",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notes",
+								"api",
+								"notes"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'POST' \\\r\n  'https://practice.expandtesting.com/notes/api/notes' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/x-www-form-urlencoded' \\\r\n  -d 'title=aa&description=aa&category=Home'"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Note without auth token key",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Should return 401 no token\", () => {\r",
+									"    pm.expect(pm.response.code).to.eql(401);\r",
+									"     const responseData = pm.response.json();\r",
+									"    pm.expect(responseData.message).to.include(\"No authentication token\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "x-auth-token",
+								"value": "{{token}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "title",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/notes/api/notes",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notes",
+								"api",
+								"notes"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'POST' \\\r\n  'https://practice.expandtesting.com/notes/api/notes' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/x-www-form-urlencoded' \\\r\n  -d 'title=aa&description=aa&category=Home'"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Notes with exceeding description length",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Should return 400 for exceeding field limit\", () => {\r",
+									"    pm.expect(pm.response.code).to.eql(400);\r",
+									"     const responseData = pm.response.json();\r",
+									"    pm.expect(responseData.message).to.include(\"Description must be between 4 and 1000 characters\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "x-auth-token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "title",
+									"value": "Shopping List",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Shopping List Shopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping List Shopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping List Shopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping List Shopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping List Shopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping List",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "Home",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/notes/api/notes",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notes",
+								"api",
+								"notes"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'POST' \\\r\n  'https://practice.expandtesting.com/notes/api/notes' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/x-www-form-urlencoded' \\\r\n  -d 'title=aa&description=aa&category=Home'"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Notes with exceeding title",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Should return 400 for exceeding field limit\", () => {\r",
+									"    pm.expect(pm.response.code).to.eql(400);\r",
+									"     const responseData = pm.response.json();\r",
+									"    pm.expect(responseData.message).to.include(\"Title must be between 4 and 100 characters\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "x-auth-token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "title",
+									"value": "Shopping List Shopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping List Shopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping List Shopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping List Shopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping List Shopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping ListShopping List",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Buy table and Chair",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "Home",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/notes/api/notes",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notes",
+								"api",
+								"notes"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'POST' \\\r\n  'https://practice.expandtesting.com/notes/api/notes' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/x-www-form-urlencoded' \\\r\n  -d 'title=aa&description=aa&category=Home'"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Get Note",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Login response contains token\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    pm.expect(responseData.data).to.have.property(\"token\");\r",
+									"\r",
+									"    pm.environment.set(\"token\", responseData.data.token);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "sabal@yopmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Admin@123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/notes/api/users/login",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notes",
+								"api",
+								"users",
+								"login"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'POST' \\\r\n  'https://practice.expandtesting.com/notes/api/users/login' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/x-www-form-urlencoded' \\\r\n  -d 'email=aasas&password=sasasasa'"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All notes",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "x-auth-token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/notes/api/notes",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notes",
+								"api",
+								"notes"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'GET' \\\r\n  'https://practice.expandtesting.com/notes/api/notes' \\\r\n  -H 'accept: application/json'"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All notes with invalid token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Should return 401 for for invalid token\", () => {\r",
+									"    pm.expect(pm.response.code).to.eql(401);\r",
+									"     const responseData = pm.response.json();\r",
+									"    pm.expect(responseData.message).to.include(\"Access token is not valid or has expired\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "x-auth-token",
+								"value": "1234",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/notes/api/notes",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notes",
+								"api",
+								"notes"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'GET' \\\r\n  'https://practice.expandtesting.com/notes/api/notes' \\\r\n  -H 'accept: application/json'"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Notes by ID with invalid ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Should return 400 for invalid ID\", () => {\r",
+									"    pm.expect(pm.response.code).to.eql(400);\r",
+									"    const responseData = pm.response.json();\r",
+									"    pm.expect(responseData.message).to.include(\"Note ID must be a valid ID\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "x-auth-token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/notes/api/notes/687",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notes",
+								"api",
+								"notes",
+								"687"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'GET' \\\r\n  'https://practice.expandtesting.com/notes/api/notes/11' \\\r\n  -H 'accept: application/json'"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Notes by ID with non existent ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Should return 404 for non-existent note\", () => {\r",
+									"    pm.expect(pm.response.code).to.eql(404);\r",
+									"    const responseData = pm.response.json();\r",
+									"    pm.expect(responseData.message).to.include(\"No note was found with the provided ID, Maybe it was deleted\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "x-auth-token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/notes/api/notes/687db7c49d1b4b028865f69c",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notes",
+								"api",
+								"notes",
+								"687db7c49d1b4b028865f69c"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'GET' \\\r\n  'https://practice.expandtesting.com/notes/api/notes/11' \\\r\n  -H 'accept: application/json'"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Update Note",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Login response contains token\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    pm.expect(responseData.data).to.have.property(\"token\");\r",
+									"\r",
+									"    pm.environment.set(\"token\", responseData.data.token);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "sabal@yopmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Admin@123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/notes/api/users/login",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notes",
+								"api",
+								"users",
+								"login"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'POST' \\\r\n  'https://practice.expandtesting.com/notes/api/users/login' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/x-www-form-urlencoded' \\\r\n  -d 'email=aasas&password=sasasasa'"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Note with invalid token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Should return 401 for for invalid token\", () => {\r",
+									"    pm.expect(pm.response.code).to.eql(401);\r",
+									"     const responseData = pm.response.json();\r",
+									"    pm.expect(responseData.message).to.include(\"Access token is not valid or has expired\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "x-auth-token",
+								"value": "123",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "title",
+									"value": "Shopping",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "go shopping today",
+									"type": "text"
+								},
+								{
+									"key": "completed",
+									"value": "false",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "Work",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/notes/api/notes/{{noteId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notes",
+								"api",
+								"notes",
+								"{{noteId}}"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'PUT' \\\r\n  'https://practice.expandtesting.com/notes/api/notes/11' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/x-www-form-urlencoded' \\\r\n  -d 'title=12&description=1&completed=false&category=Work'"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Note with invalid Note ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Should return 400 for invalid ID\", () => {\r",
+									"    pm.expect(pm.response.code).to.eql(400);\r",
+									"    const responseData = pm.response.json();\r",
+									"    pm.expect(responseData.message).to.include(\"Note ID must be a valid ID\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "x-auth-token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "title",
+									"value": "Shopping",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Go shopping",
+									"type": "text"
+								},
+								{
+									"key": "completed",
+									"value": "false",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "Work",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/notes/api/notes/11",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notes",
+								"api",
+								"notes",
+								"11"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'PUT' \\\r\n  'https://practice.expandtesting.com/notes/api/notes/11' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/x-www-form-urlencoded' \\\r\n  -d 'title=12&description=1&completed=false&category=Work'"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Note with non existent Note ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Should return 404 for non-existent note\", () => {\r",
+									"    pm.expect(pm.response.code).to.eql(404);\r",
+									"    const responseData = pm.response.json();\r",
+									"    pm.expect(responseData.message).to.include(\"No note was found with the provided ID, Maybe it was deleted\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "x-auth-token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "title",
+									"value": "Shopping",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Buy charger for phone",
+									"type": "text"
+								},
+								{
+									"key": "completed",
+									"value": "false",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "Work",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/notes/api/notes/687dc2f39d1b4b028865f812",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notes",
+								"api",
+								"notes",
+								"687dc2f39d1b4b028865f812"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'PUT' \\\r\n  'https://practice.expandtesting.com/notes/api/notes/11' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/x-www-form-urlencoded' \\\r\n  -d 'title=12&description=1&completed=false&category=Work'"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Note with blank form data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Should return 400 for missing form data values\", () => {\r",
+									"    pm.expect(pm.response.code).to.eql(400);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "x-auth-token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "title",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "completed",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/notes/api/notes/{{noteId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notes",
+								"api",
+								"notes",
+								"{{noteId}}"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'PUT' \\\r\n  'https://practice.expandtesting.com/notes/api/notes/11' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/x-www-form-urlencoded' \\\r\n  -d 'title=12&description=1&completed=false&category=Work'"
+					},
+					"response": []
+				},
+				{
+					"name": "Update the completed status of a note without form data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Should return 400 for empty or non-boolean completed value\", () => {\r",
+									"    pm.expect(pm.response.code).to.eql(400);\r",
+									"    \r",
+									"    const responseData = pm.response.json();\r",
+									"    pm.expect(responseData.message).to.include(\"completed status must be boolean\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "x-auth-token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "completed",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/notes/api/notes/{{noteId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notes",
+								"api",
+								"notes",
+								"{{noteId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Delete Note",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Login response contains token\", function () {\r",
+									"    const responseData = pm.response.json();\r",
+									"    pm.expect(responseData.data).to.have.property(\"token\");\r",
+									"\r",
+									"    pm.environment.set(\"token\", responseData.data.token);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "sabal@yopmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Admin@123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/notes/api/users/login",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notes",
+								"api",
+								"users",
+								"login"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'POST' \\\r\n  'https://practice.expandtesting.com/notes/api/users/login' \\\r\n  -H 'accept: application/json' \\\r\n  -H 'Content-Type: application/x-www-form-urlencoded' \\\r\n  -d 'email=aasas&password=sasasasa'"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Note with invalid Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Should return 401 for for invalid token\", () => {\r",
+									"    pm.expect(pm.response.code).to.eql(401);\r",
+									"    const responseData = pm.response.json();\r",
+									"    pm.expect(responseData.message).to.include(\"Access token is not valid or has expired\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "x-auth-token",
+								"value": "123123",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/notes/api/notes/{{noteId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notes",
+								"api",
+								"notes",
+								"{{noteId}}"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'DELETE' \\\r\n  'https://practice.expandtesting.com/notes/api/notes/11' \\\r\n  -H 'accept: application/json'"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Note with invalid ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Should return 400 for invalid ID\", () => {\r",
+									"    pm.expect(pm.response.code).to.eql(400);\r",
+									"    const responseData = pm.response.json();\r",
+									"    pm.expect(responseData.message).to.include(\"Note ID must be a valid ID\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "x-auth-token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/notes/api/notes/687",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notes",
+								"api",
+								"notes",
+								"687"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'DELETE' \\\r\n  'https://practice.expandtesting.com/notes/api/notes/11' \\\r\n  -H 'accept: application/json'"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Note with non existent note ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Should return 404 for non-existent note\", () => {\r",
+									"    pm.expect(pm.response.code).to.eql(404);\r",
+									"    const responseData = pm.response.json();\r",
+									"    pm.expect(responseData.message).to.include(\"No note was found with the provided ID, Maybe it was deleted\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "x-auth-token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/notes/api/notes/687db7c49d1b4b028865f69c",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notes",
+								"api",
+								"notes",
+								"687db7c49d1b4b028865f69c"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'DELETE' \\\r\n  'https://practice.expandtesting.com/notes/api/notes/11' \\\r\n  -H 'accept: application/json'"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Already deleted note.",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Should return 404 for already deleted note\", () => {\r",
+									"    pm.expect(pm.response.code).to.eql(404);\r",
+									"    const responseData = pm.response.json();\r",
+									"    pm.expect(responseData.message).to.include(\"No note was found with the provided ID, Maybe it was deleted\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "x-auth-token",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/notes/api/notes/{{noteId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"notes",
+								"api",
+								"notes",
+								"{{noteId}}"
+							]
+						},
+						"description": "Generated from cURL: curl -X 'DELETE' \\\r\n  'https://practice.expandtesting.com/notes/api/notes/11' \\\r\n  -H 'accept: application/json'"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

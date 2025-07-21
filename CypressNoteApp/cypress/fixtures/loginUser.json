@@ -1,0 +1,17 @@
+{
+    "existingUser": {
+    "name": "Sabal Gautam",
+    "email": "sabal@yopmail.com",
+    "password": "Admin@123"
+  },
+  "invalidEmailUser": {
+    "name": "Invalid Email",
+    "email": "invalidemail",
+    "password": "Admin@123"
+  },
+  "nonExistentUser": {
+    "name": "Non Existent User",
+    "email": "nonexistent@yopmail.com",
+    "password": "Admin@123"
+  }
+}

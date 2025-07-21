@@ -1,0 +1,34 @@
+{
+    "noteDataHome": {
+        "title": "Shopping List",
+        "description": "Buy fruits, milk, and bread",
+        "category": "Home",
+        "status": "complete"
+    },
+    "noteDataWork": {
+        "title": "Project Update",
+        "description": "Prepare slides for the project meeting",
+        "category": "Work",
+        "status": "incomplete"
+    },
+    "noteDataPersonal": {
+        "title": "Gym Schedule",
+        "description": "Workout plan for the week",
+        "category": "Personal",
+        "status": "incomplete"
+    },
+    "blankNoteData": {
+        "title": "",
+        "description": "",
+        "category": "",
+        "status": ""
+    },
+    "noteEdit": {
+        "title": "List",
+        "description": "Note, milk, and bread",
+        "category": "Work",
+        "status": "complete"
+    }
+
+
+}

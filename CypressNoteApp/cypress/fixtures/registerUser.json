@@ -1,0 +1,20 @@
+{
+  "validUser": {
+    "name": "Sabal Gautam",
+    "email": "sabal_test@yopmail.com",
+    "password": "Admin@123"
+  },
+  
+  "mismatchPasswordUser": {
+    "name": "Mismatch",
+    "email": "mismatch@yopmail.com",
+    "password": "Admin@123",
+    "confirmPassword": "Admin@124"
+  },
+  "existingUser": {
+    "name": "Existing User",
+    "email": "sabal@yopmail.com",
+    "password": "Admin@123",
+    "confirmPassword": "Admin@123"
+  }
+}
