@@ -3,6 +3,7 @@ name: Run Cypress Tests with Allure Report
 on:
   schedule:
     - cron: '15 19 * * *'  
+  workflow_dispatch:
 
 jobs:
   cypress-run:
